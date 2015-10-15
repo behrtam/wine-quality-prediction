@@ -1,15 +1,31 @@
 from sklearn import svm
+from sklearn.metrics import mean_squared_error
 from sklearn.cross_validation import train_test_split
 import pandas as pd
+import time
+
+tic = time.clock()
 
 df = pd.read_csv('dataset/winequality-white.csv', header=0, sep=';')
 
 X = df[list(df.columns)[:-1]]
 y = df['quality']
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=0)
-model = svm.SVC(gamma=0.001, C=100.)
-model.fit(X_train, y_train)
-
-y_predict = model.predict(X_test)
-print model.score(X_test, y_test)
+print "1"
+X_train, X_test, y_train, y_test = train_test_split(X, y)
+print "splitted"
+model_lin = svm.LinearSVC(gamma=0.0001)
+model_rbf = svm.SVC(gamma=0.0001)
+print "made model"
+model_lin.fit(X_train, y_train)
+model_rbf.fit(X_train, y_train)
+print "fitting"
+y_predict_lin = model_lin.predict(X_test)
+y_predict_rbf = model_rbf.predict(X_test)
+print "predicted"
+mse_lin = mean_squared_error(y_predict_lin, y_test)
+mse_rbf = mean_squared_error(y_predict_rbf, y_test)
+print "mserd"
+print model_lin.score(X_test, y_test), "RMSE: " + str(mse_lin ** 0.5)
+print model_rbf.score(X_test, y_test), "RMSE: " + str(mse_rbf ** 0.5)
+toc = time.clock()
+print  (toc - tic)

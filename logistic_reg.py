@@ -1,6 +1,5 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import train_test_split
-
 import pandas as pd
 
 df = pd.read_csv('winequality-white.csv', header=0, sep=';')
